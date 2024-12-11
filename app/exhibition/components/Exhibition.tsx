@@ -22,6 +22,7 @@ const images = [
   { id: '15', type: 'single' },
   { id: '17', type: 'single' },
   { id: '14', type: 'single' },
+
   { id: '39', type: 'single' },
   { id: '16', type: 'single' },
   { id: '37', type: 'single' },
@@ -51,6 +52,7 @@ export default function Exhibition() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isClient, setIsClient] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isScrolling, setIsScrolling] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
@@ -68,27 +70,59 @@ export default function Exhibition() {
           if (entry.isIntersecting) {
             const slideIndex = Number(entry.target.getAttribute('data-index'))
             setCurrentSlide(slideIndex)
+            entry.target.classList.add(styles.active)
+          } else {
+            entry.target.classList.remove(styles.active)
           }
         })
       },
-      { threshold: 0.5 }
+      { 
+        threshold: 0.5,
+        rootMargin: '-10% 0px -10% 0px'
+      }
     )
 
     container.querySelectorAll('section').forEach((section) => {
       observer.observe(section)
     })
 
-    return () => observer.disconnect()
+    let scrollTimeout: NodeJS.Timeout
+    const handleScroll = () => {
+      setIsScrolling(true)
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false)
+      }, 150)
+
+      const scrollPosition = container.scrollTop
+      const windowHeight = window.innerHeight
+      container.style.setProperty('--scroll', String(scrollPosition / windowHeight))
+    }
+
+    container.addEventListener('scroll', handleScroll)
+
+    return () => {
+      observer.disconnect()
+      container.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
   }, [isClient])
 
   const scrollToSlide = (index: number) => {
-    if (!isClient) return
-    containerRef.current?.children[index].scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+    if (!isClient || isScrolling) return
+    
+    const container = containerRef.current
+    if (!container) return
+
+    const targetSection = container.children[index] as HTMLElement
+    const containerHeight = container.clientHeight
+    const targetOffset = targetSection.offsetTop - (containerHeight - targetSection.clientHeight) / 2
+
+    container.scrollTo({
+      top: targetOffset,
+      behavior: 'smooth'
     })
   }
-
 
   return (
     <div className={styles.exhibitionWrapper}>
@@ -145,9 +179,7 @@ export default function Exhibition() {
         ))}
       </div>
       {isClient && (
-        <>
-          <Navigation totalSlides={images.length} currentSlide={currentSlide} setCurrentSlide={scrollToSlide} />
-        </>
+        <Navigation totalSlides={images.length} currentSlide={currentSlide} setCurrentSlide={scrollToSlide} />
       )}
     </div>
   )

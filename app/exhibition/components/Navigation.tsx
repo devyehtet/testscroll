@@ -1,4 +1,5 @@
 import styles from './Navigation.module.css'
+import { PlaneIcon as PaperPlane } from 'lucide-react'
 
 interface NavigationProps {
   totalSlides: number
@@ -15,11 +16,12 @@ export default function Navigation({ totalSlides, currentSlide, setCurrentSlide 
           className={`${styles.navButton} ${currentSlide === i ? styles.active : ''}`}
           onClick={() => setCurrentSlide(i)}
           aria-label={`Go to slide ${i + 1}`}
-          style={{
-            left: `${Math.sin(i * 0.5) * 20}px`,
-            transform: `scale(${currentSlide === i ? 1.2 : 1})`
-          }}
-        />
+        >
+          <PaperPlane
+            size={21}
+            className={`${styles.navIcon} ${currentSlide === i ? styles.active : ''}`}
+          />
+        </button>
       ))}
     </nav>
   )

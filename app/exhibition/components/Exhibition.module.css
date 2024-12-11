@@ -12,6 +12,9 @@
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  perspective: 1px;
+  transform-style: preserve-3d;
 }
 
 .container::-webkit-scrollbar {
@@ -26,6 +29,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, rgba(0,0,0,0) 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.section.active::before {
+  opacity: 1;
 }
 
 .welcomeSection {
@@ -38,6 +61,15 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  padding: 1rem;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.active .welcomeContent {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .welcomeText {
@@ -65,20 +97,23 @@
   }
 }
 
-.singleImageWrapper {
+.singleImageWrapper,
+.doubleImageSection {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.doubleImageSection {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: space-around;
-  align-items: center;
+.active .singleImageWrapper,
+.active .doubleImageSection {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .imageFrame {
@@ -86,7 +121,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
   background-color: transparent;
 }
 
@@ -96,17 +131,30 @@
 }
 
 .imageFrame:hover {
-  transform: scale(1.02);
-}
-
-.exhibitionImage {
-  transition: all 0.3s ease;
-}
-
-.imageFrame:hover .exhibitionImage {
   transform: scale(1.05);
 }
 
+.exhibitionImage {
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.active .exhibitionImage {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.imageFrame:hover .exhibitionImage {
+  transform: scale(1.1);
+}
+
+/* Parallax effect */
+.section {
+  transform: translateZ(calc(var(--scroll, 0) * -1px)) scale(calc(1 + var(--scroll, 0) * 0.002));
+}
 
 @media (max-width: 768px) {
   .welcomeText {
@@ -121,6 +169,22 @@
     width: 100%;
     height: 48%;
     margin: 5px 0;
+  }
+
+  .singleImageWrapper,
+  .doubleImageSection {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeText {
+    font-size: 2rem;
+  }
+
+  .singleImageWrapper,
+  .doubleImageSection {
+    padding: 0.25rem;
   }
 }
 
