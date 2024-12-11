@@ -43,7 +43,7 @@ const images = [
   { id: '31', type: 'single' },
   { id: '50', type: 'single' },
   { id: '51', type: 'single' },
-  { id: '53', type: 'single' },
+
   { id: '55', type: 'single' }
 ]
 
