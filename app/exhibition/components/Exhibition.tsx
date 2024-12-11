@@ -43,7 +43,7 @@ const images = [
   { id: '31', type: 'single' },
   { id: '50', type: 'single' },
   { id: '51', type: 'single' },
-
+  { id: '53', type: 'single' },
   { id: '55', type: 'single' }
 ]
 
@@ -89,17 +89,6 @@ export default function Exhibition() {
     })
   }
 
-  const handlePrevSlide = () => {
-    if (currentSlide > 0) {
-      scrollToSlide(currentSlide - 1)
-    }
-  }
-
-  const handleNextSlide = () => {
-    if (currentSlide < images.length - 1) {
-      scrollToSlide(currentSlide + 1)
-    }
-  }
 
   return (
     <div className={styles.exhibitionWrapper}>
