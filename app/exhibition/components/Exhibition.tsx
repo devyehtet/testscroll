@@ -19,10 +19,9 @@ const images = [
   { id: '18', type: 'single' },
   { id: '19', type: 'single' },
   { id: '20', type: 'single' },
+  { id: '14', type: 'single' },
   { id: '15', type: 'single' },
   { id: '17', type: 'single' },
-  { id: '14', type: 'single' },
-
   { id: '39', type: 'single' },
   { id: '16', type: 'single' },
   { id: '37', type: 'single' },
@@ -34,8 +33,8 @@ const images = [
   { id: '38', type: 'single' },
   { id: '36', type: 'single' },
   { id: '13', type: 'single' },
-  { id: '01', type: 'single' },
-  { id: '02-03', type: 'double' },
+  { id: '1', type: 'single' },
+  { id: '2-3', type: 'double' },
   { id: '48', type: 'single' },
   { id: '45', type: 'single' },
   { id: '22', type: 'single' },
@@ -93,10 +92,6 @@ export default function Exhibition() {
       scrollTimeout = setTimeout(() => {
         setIsScrolling(false)
       }, 150)
-
-      const scrollPosition = container.scrollTop
-      const windowHeight = window.innerHeight
-      container.style.setProperty('--scroll', String(scrollPosition / windowHeight))
     }
 
     container.addEventListener('scroll', handleScroll)
@@ -150,6 +145,7 @@ export default function Exhibition() {
                     className={styles.exhibitionImage}
                   />
                 </div>
+                <div className={styles.imageShadow}></div>
               </div>
             ) : image.type === 'double' ? (
               <div className={styles.doubleImageSection}>
@@ -162,6 +158,7 @@ export default function Exhibition() {
                     priority={index < 2}
                     className={styles.exhibitionImage}
                   />
+                  <div className={styles.imageShadow}></div>
                 </div>
                 <div className={styles.imageFrame}>
                   <Image
@@ -172,9 +169,11 @@ export default function Exhibition() {
                     priority={index < 2}
                     className={styles.exhibitionImage}
                   />
+                  <div className={styles.imageShadow}></div>
                 </div>
               </div>
             ) : null}
+            <div className={styles.floorReflection}></div>
           </section>
         ))}
       </div>

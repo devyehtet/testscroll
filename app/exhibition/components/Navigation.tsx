@@ -18,7 +18,7 @@ export default function Navigation({ totalSlides, currentSlide, setCurrentSlide 
           aria-label={`Go to slide ${i + 1}`}
         >
           <PaperPlane
-            size={21}
+            size={16}
             className={`${styles.navIcon} ${currentSlide === i ? styles.active : ''}`}
           />
         </button>
